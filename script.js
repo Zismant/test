@@ -3,20 +3,38 @@
 function Calculator() {
     this.calculate = function(str) {
         let arr = str.split(' ');
-        this.a = +arr[0];
-        this.b = +arr[2];
-        this.operation = arr[1];
-        console.log(arr);
+        let a = +arr[0];
+        let b = +arr[2];
+        let operation = arr[1];
 
-        if (this.operation === '+') {return this.plus();}
-        if (this.operation === '-') {this.minus();}
+        if(!this.methods || isNaN(a) || isNaN(b)) {
+            return NaN;
+        }
+
+        return this.methods[operation](a, b);
+    };
+
+    this.methods = {
+        '-': (a, b) => a - b,
+        '+': (a, b) => a + b,
+    };
+
+    this.addMethod = function(name, func) {
+        this.methods[name] = func;
 
     };
 
-    this.plus = () => this.a + this.b;
-    this.plus = () => this.a + this.b;
+    
 
 }
 
-    let calc = new Calculator();
-    console.log(calc.calculate("3 - 7"));
+let calc = new Calculator();
+
+
+let powerCalc = new Calculator();
+powerCalc.addMethod("*", (a, b) => a * b);
+powerCalc.addMethod("/", (a, b) => a / b);
+powerCalc.addMethod("**", (a, b) => a ** b);
+
+let result = powerCalc.calculate("9 *** 3");
+console.log(result);
