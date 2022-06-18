@@ -1,40 +1,36 @@
 'use strict';
 
-function Calculator() {
-    this.calculate = function(str) {
-        let arr = str.split(' ');
-        let a = +arr[0];
-        let b = +arr[2];
-        let operation = arr[1];
+function formatDate(date) {
+  
+  let dif = new Date() - date;
+  let difSec = Math.round(dif / 1000);
 
-        if(!this.methods || isNaN(a) || isNaN(b)) {
-            return NaN;
-        }
+  if (difSec < 1) {return 'прямо сейчас';}
 
-        return this.methods[operation](a, b);
-    };
+  let difMinut = difSec / 60;
+  if (difMinut < 1) {return `${difSec} сек. назад`;}
 
-    this.methods = {
-        '-': (a, b) => a - b,
-        '+': (a, b) => a + b,
-    };
+  let difHour = difMinut / 60;
+  if (difHour < 1) {return `${difMinut} мин. назад`;}
 
-    this.addMethod = function(name, func) {
-        this.methods[name] = func;
+  let d = {};
+  d.date = date.getDate();
+  d.date = d.date < 10 ? '0' + d.date.toString() : d.date;
+  d.month = date.getMonth() + 1;
+  d.month = d.month < 10 ? '0' + d.month.toString() : d.month;
+  d.year = date.getFullYear().toString().slice(2);
+  d.hour = date.getHours();
+  d.hour = d.hour < 10 ? '0' + d.hour.toString() : d.hour;
+  d.minut = date.getMinutes();
+  d.minut = d.minut < 10 ? '0' + d.minut.toString() : d.minut;
 
-    };
-
-    
-
+  return `${d.date}.${d.month}.${d.year} ${d.hour}:${d.minut}`;
 }
 
-let calc = new Calculator();
+console.log(formatDate(new Date(new Date() - 1)));
+console.log(formatDate(new Date(new Date() - 30 * 1000)));
+console.log(formatDate(new Date(new Date() - 5 * 60 * 1000)));
+console.log(formatDate(new Date(new Date() - 84600 * 1000 )));
 
 
-let powerCalc = new Calculator();
-powerCalc.addMethod("*", (a, b) => a * b);
-powerCalc.addMethod("/", (a, b) => a / b);
-powerCalc.addMethod("**", (a, b) => a ** b);
 
-let result = powerCalc.calculate("9 *** 3");
-console.log(result);
